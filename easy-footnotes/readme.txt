@@ -3,8 +3,8 @@ Contributors: yingling017, twinpictures
 Donate link: http://jasonyingling.me
 Tags: footnotes, read, blogging, hover, tooltips, editing, endnotes, Formatting, writing, bibliography, notes, reference
 Requires at least: 3.0.1
-Tested up to: 6.6.2
-Stable tag: 1.1.8
+Tested up to: 6.7
+Stable tag: 1.1.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -63,12 +63,24 @@ Place the following code in your functions.php file to disable the qTip features
 add_action( 'wp_enqueue_scripts', 'efn_deregister_scripts' );</code>
 </pre>
 
+= How can I reset the footnote count? =
+
+Use on the beginning of your page with the short code: `[efn_reset][/efn_reset]`
+
+This is a hard reset to fix a bug with themes/plugins using `do_shortcode( get_the_content() )` outside the main loop and causing duplicate footnotes. 1.1.9 should have updates to not require this.
+
 == Screenshots ==
 
 1. Displaying a footnote on hover.
 2. Several footnotes (feetnote?) at the bottom of the post.
 
 == Changelog ==
+
+= 1.1.9 =
+* Adds support for duplicate footnotes using the same number
+* Fixes a bug with multiple footnotes showing at the bottom when do_shortcode() is run on the_content outside the main loop.
+* Add better i18n support for the plugin
+* Adds [efn_reset] shortcode to reset the footnote count
 
 = 1.1.8 =
 * WordPress 6.6 support
