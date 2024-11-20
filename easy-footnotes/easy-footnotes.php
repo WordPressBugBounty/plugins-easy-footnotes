@@ -4,7 +4,7 @@
  * Plugin URI: https://jasonyingling.me/easy-footnotes-wordpress/
  * Description: Easily add footnotes to your posts with a simple shortcode.
  * Text Domain: easy-footnotes
- * Version: 1.1.9
+ * Version: 1.1.10
  * Author: Jason Yingling
  * Author URI: https://jasonyingling.me
  * License: GPL2
@@ -47,7 +47,7 @@ class easyFootnotes {
 
 	private $footnoteSettings;
 
-	private $version = '1.1.9';
+	private $version = '1.1.10';
 
 	/**
 	 * Constructing the initial plugin options, shortcodes, and hooks.
@@ -58,6 +58,7 @@ class easyFootnotes {
 			'useLabel'                       => false,
 			'hide_easy_footnote_after_posts' => false,
 			'show_easy_footnote_on_front'    => false,
+			'reset_footnotes'                => false,
 		);
 
 		add_option( 'easy_footnotes_options', $this->footnoteSettings );
@@ -65,7 +66,11 @@ class easyFootnotes {
 		add_shortcode( 'efn_note', array( $this, 'easy_footnote_shortcode' ) );
 		add_shortcode( 'efn_reset', array( $this, 'short_code_reset' ) );
 		add_filter( 'the_content', array( $this, 'easy_footnote_after_content' ), 20 );
-		add_filter( 'the_content', array( $this, 'easy_footnote_reset' ), 999 );
+		
+		$this->footnoteOptions = get_option( 'easy_footnotes_options' );
+		if ( isset( $this->footnoteOptions['reset_footnotes'] ) && $this->footnoteOptions['reset_footnotes'] ) {
+			add_filter( 'the_content', array( $this, 'easy_footnote_reset' ), 999 );
+		}
 		
 		add_action( 'wp_enqueue_scripts', array( $this, 'register_qtip_scripts' ) );
 		add_action( 'admin_menu', array( $this, 'easy_footnotes_admin_actions' ) );
@@ -188,7 +193,7 @@ class easyFootnotes {
 		}
 
 		if ( isset( $this->footnoteOptions['show_easy_footnote_on_front'] ) && $this->footnoteOptions['show_easy_footnote_on_front'] ) {
-			$efn_show_on_front = is_front_page();
+			$efn_show_on_front = is_front_page() || is_home();
 		} else {
 			$efn_show_on_front = false;
 		}
